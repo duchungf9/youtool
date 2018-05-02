@@ -7,4 +7,7 @@ use Illuminate\Http\Request;
 class YoutubeController extends Controller
 {
     //
+	public function search(){
+		return view('search_tool');
+	}
 }
