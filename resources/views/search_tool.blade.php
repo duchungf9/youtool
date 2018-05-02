@@ -9,7 +9,7 @@
                         Creative Tim
                     </a>
                 </div>
-                
+
                 <ul class="nav">
                     <li>
                         <a href="dashboard.html">
@@ -62,7 +62,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <div class="main-panel">
             <nav class="navbar navbar-default navbar-fixed">
                 <div class="container-fluid">
@@ -108,7 +108,7 @@
                                 </a>
                             </li>
                         </ul>
-                        
+
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="">
@@ -121,7 +121,7 @@
                                         Dropdown
                                         <b class="caret"></b>
                                     </p>
-                                
+
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">Action</a></li>
@@ -143,8 +143,8 @@
                     </div>
                 </div>
             </nav>
-            
-            
+
+
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -154,7 +154,7 @@
                                     <h4 class="title">Edit Profile</h4>
                                 </div>
                                 <div class="content">
-                                    
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -178,8 +178,8 @@
                                         </div>
                                     </div>
                                     <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Tạo Playlist Mới</a>
-                                    <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Lưu các video đã tìm thấy</a>
-                                    
+                                    <a id="playlist-button"  onclick="addVideosToPlaylist('PLshsG_X5SMBgrjn-uGr53kWNSdVstvI-Z')" class="btn btn-warning">Insert to PLshsG_X5SMBgrjn-uGr53kWNSdVstvI-Z</a>
+
                                     <a href="javascript:void(0);" id="search_btn" class="btn btn-info btn-fill pull-right">Tìm Kiếm</a>
                                     <div class="clearfix"></div>
                                 </div>
@@ -200,7 +200,7 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                
+
                                 </div>
                             </div>
                         </div>
@@ -213,10 +213,16 @@
                                     <div class="author">
                                         <a href="#">
                                             <img class="avatar border-gray" src="http://static.phimmoi.net/post/2014/12/08/dragon-ball-z-revival-of-f-7.png" alt="..."/>
-                                            
+
                                             <h4 class="title">Login<br />
                                                 <small>
-                                                    <button class="btn btn-danger" id="login-link">Đăng nhập</button>
+                                                    <button class="btn btn-danger" id="authorize-button">Đăng nhập</button>
+                                                </small>
+                                            </h4>
+
+                                            <h4 class="title">Logout<br/>
+                                                <small>
+                                                    <button class="btn btn-danger" id="logout-button">Đăng xuat</button>
                                                 </small>
                                             </h4>
                                         </a>
@@ -231,11 +237,11 @@
                                     <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
                                     <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
                                     <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
-                                
+
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
@@ -246,4 +252,71 @@
     <script src="assets/js/search.js"></script>
     <script src="assets/js/playlist_updates.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+    <script async defer src="https://apis.google.com/js/api.js"
+            onload="this.onload=function(){};handleClientLoad()"
+            onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+    <script>
+        var authorizeButton = $('#authorize-button');
+        var signoutButton = $('#logout-button');
+        var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
+
+        /**
+         *  On load, called to load the auth2 library and API client library.
+         */
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        /**
+         *  Initializes the API client library and sets up sign-in state
+         *  listeners.
+         */
+        function initClient() {
+            gapi.client.init({
+                discoveryDocs: DISCOVERY_DOCS,
+                clientId: OAUTH2_CLIENT_ID,
+                scope: OAUTH2_SCOPES
+            }).then(function () {
+                // Listen for sign-in state changes.
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+                // Handle the initial sign-in state.
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                authorizeButton.onclick = handleAuthClick;
+                signoutButton.onclick = handleSignoutClick;
+            });
+        }
+
+        /**
+         *  Called when the signed in status changes, to update the UI
+         *  appropriately. After a sign-in, the API is called.
+         */
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                authorizeButton.style.display = 'none';
+                signoutButton.style.display = 'block';
+                getChannel();
+            } else {
+                authorizeButton.style.display = 'block';
+                signoutButton.style.display = 'none';
+            }
+        }
+
+        /**
+         *  Sign in the user upon button click.
+         */
+        function handleAuthClick(event) {
+            gapi.auth2.getAuthInstance().signIn();
+        }
+
+        /**
+         *  Sign out the user upon button click.
+         */
+        function handleSignoutClick(event) {
+            alert('xx');
+            gapi.auth2.getAuthInstance().signOut();
+        }
+
+    </script>
 @endsection

@@ -15,3 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('search_tool','YoutubeController@search');
+Route::get('login','YoutubeController@login');
+Route::get('test',function(){
+    return view('playlist_updates');
+});

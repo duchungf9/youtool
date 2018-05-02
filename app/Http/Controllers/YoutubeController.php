@@ -10,4 +10,8 @@ class YoutubeController extends Controller
 	public function search(){
 		return view('search_tool');
 	}
+
+	public function login(){
+	    return view('login');
+    }
 }

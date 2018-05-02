@@ -17,8 +17,8 @@ function createPlaylist() {
     part: 'snippet,status',
     resource: {
       snippet: {
-        title: $("#playlist_title").val(),
-        description: $("#playlist_des").val()
+        title: 'Truyen Ke Cho be',
+        description: 'A private playlist created with the YouTube API'
       },
       status: {
         privacyStatus: 'public'
@@ -41,27 +41,6 @@ function createPlaylist() {
 // Add a video ID specified in the form to the playlist.
 function addVideoToPlaylist() {
   addToPlaylist($('#video-id').val());
-}
-
-function addVideosToPlaylist(playlistId){
-  $.each(videosData,function(key,value){
-      var details = {
-          videoId: value.id.videoId,
-          kind: 'youtube#video'
-      }
-      var request = gapi.client.youtube.playlistItems.insert({
-          part: 'snippet',
-          resource: {
-              snippet: {
-                  playlistId: playlistId,
-                  resourceId: details
-              }
-          }
-      });
-      request.execute(function(response) {
-          console.log('abc');
-      });
-  });
 }
 
 // Add a video to a playlist. The "startPos" and "endPos" values let you
