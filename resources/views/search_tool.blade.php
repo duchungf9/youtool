@@ -178,6 +178,7 @@
                                         </div>
                                     </div>
                                     <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Tạo Playlist Mới</a>
+                                    <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Lưu các video đã tìm thấy</a>
                                     
                                     <a href="javascript:void(0);" id="search_btn" class="btn btn-info btn-fill pull-right">Tìm Kiếm</a>
                                     <div class="clearfix"></div>

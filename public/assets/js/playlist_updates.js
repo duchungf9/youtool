@@ -43,6 +43,10 @@ function addVideoToPlaylist() {
   addToPlaylist($('#video-id').val());
 }
 
+function addVideosToPlaylist(playlistId){
+
+}
+
 // Add a video to a playlist. The "startPos" and "endPos" values let you
 // start and stop the video at specific times when the video is played as
 // part of the playlist. However, these values are not set in this example.

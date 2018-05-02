@@ -7,20 +7,24 @@ function handleAPILoaded() {
 $("#search_btn").click(function(){
     search();
 });
+var videosData = [];
 function search() {
+    videosData = [];    //reset videos
   var q = $('#search_key').val();
   var params = {
       q: q,
       part: 'snippet',
-      maxResults:50
+      maxResults:50,
+      order:'viewCount',
+      type:'video',
+      videoDuration:'short'
   };
   var request = gapi.client.youtube.search.list(params);
 
   request.execute(function(response) {
-
-
     $html = "";
     $.each(response.items,function(key,value){
+        videosData.push(value);
         if(value.id.videoId != 'undefined'){
             $html += "<tr>";
             $html+= "<td>"+value.snippet.title+"</td>";
@@ -33,7 +37,8 @@ function search() {
 
     $('#search_resuilts').empty().html($html);
       if(response.nextPageToken != null){
-          searchPage(response.nextPageToken,params);
+          // searchPage(response.nextPageToken,params);
+          //tạm thời chỉ lưu 50 video trên cùng
       }
   });
 }
@@ -48,6 +53,7 @@ function searchPage(pagetoken,params){
         }
         $html = "";
         $.each(response.items,function(key,value){
+            videosData.push(value);
             if(value.id.videoId != 'undefined') {
                 $html += "<tr>";
                 $html += "<td>" + value.snippet.title + "</td>";
