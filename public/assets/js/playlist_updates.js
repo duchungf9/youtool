@@ -53,14 +53,15 @@ function addVideosToPlaylist(playlistId){
           part: 'snippet',
           resource: {
               snippet: {
-                  playlistId: playlistId,
+                  playlistId: "PLshsG_X5SMBi_WPrbjJmkGwzONrjNTzRb",
                   resourceId: details
               }
           }
       });
       request.execute(function(response) {
-          console.log('abc');
+          console.log(response);
       });
+      // return false;
   });
 }
 

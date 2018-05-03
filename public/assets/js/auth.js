@@ -6,6 +6,9 @@ var OAUTH2_CLIENT_ID = '613908046851-jabl73m3nikvv7480q83r3t6i73c3hdq.apps.googl
 var OAUTH2_SCOPES = [
   'https://www.googleapis.com/auth/youtube',
     "https://www.googleapis.com/auth/youtubepartner",
+    "https://www.googleapis.com/auth/youtube.readonly",
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtubepartner-channel-audit",
     "https://www.googleapis.com/auth/youtube.force-ssl"
 ];
 // Upon loading, the Google APIs JS client automatically invokes this callback.
@@ -25,7 +28,7 @@ function checkAuth() {
     gapi.auth.authorize({
     client_id: OAUTH2_CLIENT_ID,
     scope: OAUTH2_SCOPES,
-    immediate: true
+    immediate: false
   }, handleAuthResult);
 }
 
@@ -46,7 +49,7 @@ function handleAuthResult(authResult) {
       gapi.auth.authorize({
         client_id: OAUTH2_CLIENT_ID,
         scope: OAUTH2_SCOPES,
-        immediate: false
+        immediate: true
         }, handleAuthResult);
     });
   }
