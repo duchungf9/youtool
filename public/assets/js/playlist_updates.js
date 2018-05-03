@@ -42,32 +42,42 @@ function createPlaylist() {
 function addVideoToPlaylist() {
   addToPlaylist($('#video-id').val());
 }
+var arrayIds = [];
+function addVideosToPlaylist(){
+    var playlistId = $("#playlistId").val();
+      $.each(videosData,function(key,value){
+          arrayIds.push(value.id.videoId);
+      });
+    // console.log(arrayIds);
+    addVidToPlaylist(0,playlistId);
+}
 
-function addVideosToPlaylist(playlistId){
-  $.each(videosData,function(key,value){
-      var details = {
-          videoId: value.id.videoId,
-          kind: 'youtube#video'
-      }
-      var request = gapi.client.youtube.playlistItems.insert({
-          part: 'snippet',
-          resource: {
-              snippet: {
-                  playlistId: "PLshsG_X5SMBi_WPrbjJmkGwzONrjNTzRb",
-                  resourceId: details
-              }
-          }
-      });
-      request.execute(function(response) {
-          console.log(response);
-      });
-      // return false;
-  });
+function addVidToPlaylist(arrayIdsIndex,playlistId){
+    var details = {
+        videoId: arrayIds[arrayIdsIndex],
+        kind: 'youtube#video'
+    }
+    var request = gapi.client.youtube.playlistItems.insert({
+        part: 'snippet',
+        resource: {
+            snippet: {
+                playlistId: playlistId,
+                resourceId: details
+            }
+        }
+    });
+    request.execute(function(response) {
+        arrayIdsIndex +=1;
+        if(arrayIdsIndex < arrayIds.length){
+            addVidToPlaylist(arrayIdsIndex,playlistId);
+        }
+
+    });
 }
 
 // Add a video to a playlist. The "startPos" and "endPos" values let you
 // start and stop the video at specific times when the video is played as
-// part of the playlist. However, these values are not set in this example.
+// part of the playlist. However, these values are not set in this example.7777777
 function addToPlaylist(id, startPos, endPos) {
   var details = {
     videoId: id,

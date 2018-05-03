@@ -143,8 +143,6 @@
                     </div>
                 </div>
             </nav>
-
-
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -177,8 +175,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Điền ID playlist</label>
+                                                <input type="text" id="playlistId" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Tạo Playlist Mới</a>
-                                    <a id="playlist-button"  onclick="addVideosToPlaylist('PLshsG_X5SMBgrjn-uGr53kWNSdVstvI-Z')" class="btn btn-warning">Insert to PLshsG_X5SMBgrjn-uGr53kWNSdVstvI-Z</a>
+                                    <a id="playlist-button"  onclick="addVideosToPlaylist()" class="btn btn-warning">Insert to playlist</a>
 
                                     <a href="javascript:void(0);" id="search_btn" class="btn btn-info btn-fill pull-right">Tìm Kiếm</a>
                                     <div class="clearfix"></div>
@@ -252,71 +258,4 @@
     <script src="assets/js/search.js"></script>
     <script src="assets/js/playlist_updates.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-            onload="this.onload=function(){};handleClientLoad()"
-            onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-    <script>
-        var authorizeButton = $('#authorize-button');
-        var signoutButton = $('#logout-button');
-        var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
-
-        /**
-         *  On load, called to load the auth2 library and API client library.
-         */
-        function handleClientLoad() {
-            gapi.load('client:auth2', initClient);
-        }
-
-        /**
-         *  Initializes the API client library and sets up sign-in state
-         *  listeners.
-         */
-        function initClient() {
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                clientId: OAUTH2_CLIENT_ID,
-                scope: OAUTH2_SCOPES
-            }).then(function () {
-                // Listen for sign-in state changes.
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-                // Handle the initial sign-in state.
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-                authorizeButton.onclick = handleAuthClick;
-                signoutButton.onclick = handleSignoutClick;
-            });
-        }
-
-        /**
-         *  Called when the signed in status changes, to update the UI
-         *  appropriately. After a sign-in, the API is called.
-         */
-        function updateSigninStatus(isSignedIn) {
-            if (isSignedIn) {
-                authorizeButton.style.display = 'none';
-                signoutButton.style.display = 'block';
-                getChannel();
-            } else {
-                authorizeButton.style.display = 'block';
-                signoutButton.style.display = 'none';
-            }
-        }
-
-        /**
-         *  Sign in the user upon button click.
-         */
-        function handleAuthClick(event) {
-            gapi.auth2.getAuthInstance().signIn();
-        }
-
-        /**
-         *  Sign out the user upon button click.
-         */
-        function handleSignoutClick(event) {
-            alert('xx');
-            gapi.auth2.getAuthInstance().signOut();
-        }
-
-    </script>
 @endsection

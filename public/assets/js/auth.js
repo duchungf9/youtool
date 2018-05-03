@@ -2,7 +2,7 @@
 // at {{ https://cloud.google.com/console }}.
 // If you run this code from a server other than http://localhost,
 // you need to register your own client ID.
-var OAUTH2_CLIENT_ID = '613908046851-jabl73m3nikvv7480q83r3t6i73c3hdq.apps.googleusercontent.com';
+var OAUTH2_CLIENT_ID = '990134486198-ojek7fk9eis03vi0evq5c3m7fh9maski.apps.googleusercontent.com';
 var OAUTH2_SCOPES = [
   'https://www.googleapis.com/auth/youtube',
     "https://www.googleapis.com/auth/youtubepartner",
@@ -14,7 +14,8 @@ var OAUTH2_SCOPES = [
 // Upon loading, the Google APIs JS client automatically invokes this callback.
 googleApiClientReady = function() {
   gapi.auth.init(function() {
-    window.setTimeout(checkAuth, 1);
+    window.setTimeout(checkAuth(), 1000);
+    // getChannel();
   });
 }
 
@@ -24,16 +25,16 @@ googleApiClientReady = function() {
 // succeeds with no user intervention. Otherwise, it fails and the
 // user interface that prompts for authorization needs to display.
 function checkAuth() {
-    console.log(gapi);
     gapi.auth.authorize({
     client_id: OAUTH2_CLIENT_ID,
     scope: OAUTH2_SCOPES,
-    immediate: false
+    immediate: true
   }, handleAuthResult);
 }
 
 // Handle the result of a gapi.auth.authorize() call.
 function handleAuthResult(authResult) {
+    alert('callbacked');
     console.log(authResult);
     if (authResult && !authResult.error) {
         // Authorization was successful. Hide authorization prompts and show
@@ -86,4 +87,3 @@ function getChannel() {
     });
 }
 
-getChannel();
