@@ -7,14 +7,15 @@
     "require": {
         "php": ">=5.6.4",
         "alaouy/youtube": "^2.2",
-        "laravel/framework": "5.3.*"
+        "laravel/framework": "5.5.*",
+        "norkunas/youtube-dl-php": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.0",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "symfony/css-selector": "3.3.*",
+        "symfony/dom-crawler": "3.3.*"
     },
     "autoload": {
         "classmap": [

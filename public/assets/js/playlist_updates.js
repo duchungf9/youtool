@@ -67,6 +67,7 @@ function addVidToPlaylist(arrayIdsIndex,playlistId){
         }
     });
     request.execute(function(response) {
+        $("#"+arrayIds[arrayIdsIndex]).remove();
         arrayIdsIndex +=1;
         if(arrayIdsIndex < arrayIds.length){
             addVidToPlaylist(arrayIdsIndex,playlistId);

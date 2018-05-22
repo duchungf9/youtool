@@ -19,3 +19,6 @@ Route::get('login','YoutubeController@login');
 Route::get('test',function(){
     return view('playlist_updates');
 });
+Route::get('xxx/{videoId?}','YoutubeController@youtube_dl');
+
+Route::get('all-videos-channel/{channelId?}','YoutubeController@getAllVIdeos');

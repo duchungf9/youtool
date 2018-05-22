@@ -34,16 +34,23 @@ function checkAuth() {
 
 // Handle the result of a gapi.auth.authorize() call.
 function handleAuthResult(authResult) {
-    alert('callbacked');
+    console.log('callbacked');
     console.log(authResult);
     if (authResult && !authResult.error) {
         // Authorization was successful. Hide authorization prompts and show
     // content that should be visible after authorization succeeds.
     $('.pre-auth').hide();
     $('.post-auth').show();
-
     loadAPIClientInterfaces();
   } else {
+    gapi.auth.authorize(
+        {
+            'client_id': OAUTH2_CLIENT_ID,
+            'scope': OAUTH2_SCOPES,
+        },
+        function (authResult) {gapi.auth.signIn();
+        alert('Bạn cần reload lại trang sau khi login!');}
+    );
     // Make the #login-link clickable. Attempt a non-immediate OAuth 2.0
     // client flow. The current function is called when that flow completes.
     $('#login-link').click(function() {
@@ -62,6 +69,7 @@ function handleAuthResult(authResult) {
 function loadAPIClientInterfaces() {
   gapi.client.load('youtube', 'v3', function() {
     handleAPILoaded();
+    getChannel();
   });
 }
 
@@ -80,6 +88,10 @@ function getChannel() {
         'mine': 'true'
     }).then(function(response) {
         var channel = response.result.items[0];
+        var channelavt = $(".channelavt");
+        var channeltitle = $(".channeltitle");
+        channelavt.attr('src',channel.snippet.thumbnails.default.url);
+        channeltitle.html(channel.snippet.title);
         console.log(response);
         console.log('This channel\'s ID is ' + channel.id + '. ' +
             'Its title is \'' + channel.snippet.title + ', ' +

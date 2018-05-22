@@ -158,21 +158,58 @@
                                             <div class="form-group">
                                                 <label>Tìm Video</label>
                                                 <input type="text" id="search_key" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
+                                                <label for=""> Độ dài</label>
+                                                <select name="" id="vidDuration" class="form-control">
+                                                    <option value="any">Bất Kỳ</option>
+                                                    <option value="short">Ngắn</option>
+                                                    <option value="medium">Trung bình</option>
+                                                    <option value="long">Dài</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Tạo Playlist mới - Tên playlist</label>
-                                                <input type="text" id="playlist_title" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
+                                        <a class="btn btn-info btn-fill pull-right" data-toggle="collapse" href="#newPlaylist" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Xổ ra khung tạo mới playlist
+                                        </a>
+                                        <div class="collapse" id="newPlaylist">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Tạo Playlist mới - Tên playlist</label>
+                                                    <input type="text" id="playlist_title" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Phần mô tả playlist</label>
+                                                    <input type="text" id="playlist_des" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
+                                                </div>
+                                                <br>
+                                                <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Tạo Playlist Mới</a>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Phần mô tả playlist</label>
-                                                <input type="text" id="playlist_des" class="form-control" placeholder="Nhập từ khóa (1 từ hoặc 1 cụm từ )" value="">
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <a class="btn btn-info btn-fill pull-right" data-toggle="collapse" href="#insertPlaylist" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Nhấn để xem danh sách playlist
+                                        </a>
+                                        <div class="collapse" id="insertPlaylist">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <th>ID</th>
+                                                <th>Tên playlist</th>
+                                                <th>Trạng Thái</th>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($playlist as $list)
+                                                    <tr>
+                                                        <td>{!! $list->id !!}</td>
+                                                        <td>{!! $list->snippet->title !!}</td>
+                                                        <td>{!! $list->status->privacyStatus !!}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -183,7 +220,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a id="playlist-button" disabled onclick="createPlaylist()" class="btn btn-warning">Tạo Playlist Mới</a>
                                     <a id="playlist-button"  onclick="addVideosToPlaylist()" class="btn btn-warning">Insert to playlist</a>
 
                                     <a href="javascript:void(0);" id="search_btn" class="btn btn-info btn-fill pull-right">Tìm Kiếm</a>
@@ -218,14 +254,8 @@
                                 <div class="content">
                                     <div class="author">
                                         <a href="#">
-                                            <img class="avatar border-gray" src="http://static.phimmoi.net/post/2014/12/08/dragon-ball-z-revival-of-f-7.png" alt="..."/>
-
-                                            <h4 class="title">Login<br />
-                                                <small>
-                                                    <button class="btn btn-danger" id="authorize-button">Đăng nhập</button>
-                                                </small>
-                                            </h4>
-
+                                            <img class="avatar border-gray channelavt" src="http://static.phimmoi.net/post/2014/12/08/dragon-ball-z-revival-of-f-7.png" alt="..."/>
+                                            
                                             <h4 class="title">Logout<br/>
                                                 <small>
                                                     <button class="btn btn-danger" id="logout-button">Đăng xuat</button>
@@ -233,7 +263,7 @@
                                             </h4>
                                         </a>
                                     </div>
-                                    <p class="description text-center"> "Lamborghini Mercy <br>
+                                    <p class="description text-center channeltitle"> "Lamborghini Mercy <br>
                                         Your chick she so thirsty <br>
                                         I'm in that two seat Lambo"
                                     </p>

@@ -10,6 +10,7 @@ $("#search_btn").click(function(){
 var videosData = [];
 function search() {
     videosData = [];    //reset videos
+  var vidDuration = $("#vidDuration").val();
   var q = $('#search_key').val();
   var params = {
       q: q,
@@ -17,7 +18,7 @@ function search() {
       maxResults:50,
       order:'viewCount',
       type:'video',
-      videoDuration:'short'
+      videoDuration:vidDuration
   };
   var request = gapi.client.youtube.search.list(params);
 
@@ -26,10 +27,10 @@ function search() {
     $.each(response.items,function(key,value){
         videosData.push(value);
         if(value.id.videoId != 'undefined'){
-            $html += "<tr>";
+            $html += "<tr id='"+value.id.videoId+"'>";
             $html+= "<td>"+value.snippet.title+"</td>";
             $html+= "<td>"+value.id.videoId+"</td>";
-            $html+= "<td><a href='https://youtube.com/watch?v="+value.id.videoId+"'>https://youtube.com?v="+value.id.videoId+"</a></td>";
+            $html+= "<td><a href='https://youtube.com/watch?v="+value.id.videoId+"' target='_blank'>https://youtube.com?v="+value.id.videoId+"</a></td>";
             $html+= "</tr>";
         }
 
