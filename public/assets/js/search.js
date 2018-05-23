@@ -31,6 +31,7 @@ function search() {
             $html+= "<td>"+value.snippet.title+"</td>";
             $html+= "<td>"+value.id.videoId+"</td>";
             $html+= "<td><a href='https://youtube.com/watch?v="+value.id.videoId+"' target='_blank'>https://youtube.com?v="+value.id.videoId+"</a></td>";
+            $html+= "<td><a href='javascript:void(0);' data-vidid='"+value.id.videoId+"' onclick='downloadToLocal(this)'>Tải video này.</a></td>";
             $html+= "</tr>";
         }
 
@@ -67,3 +68,21 @@ function searchPage(pagetoken,params){
 
     });
 }
+
+function downloadToLocal(obj){
+    var vidid = ($(obj).attr('data-vidid'));
+    $.ajax({
+        url:"/youtool/public/downloadYt",
+        data:{videoId:vidid},
+        type:'POST',
+        success:function(data){
+
+        }
+    });
+}
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});

@@ -33,15 +33,19 @@ class YoutubeController extends Controller
 		dd($videos);
 	}
 	
-	public function youtube_dl($videoId)
+	public function youtube_dl()
 	{
+		$videoId = request()->get('videoId');
+		if(!$videoId){
+			echo 'failed';die;
+		}
 		$dl = new YoutubeDl([
 			'continue' => true, // force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
 			'format' => 'bestvideo',
 		]);
 		// For more options go to https://github.com/rg3/youtube-dl#user-content-options
 		$dl->setBinPath(storage_path('/youtube-dl.exe'));
-		$dl->setDownloadPath(storage_path("/videos"));
+		$dl->setDownloadPath(storage_path("videos"));
 		try {
 			$video = $dl->download('https://www.youtube.com/watch?v='.$videoId);
 			echo $video->getTitle(); // Will return Phonebloks

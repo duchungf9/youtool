@@ -231,6 +231,7 @@
                                         <th>Tên Video</th>
                                         <th>ID</th>
                                         <th>Link</th>
+                                        <th>Tải~~</th>
                                         </thead>
                                         <tbody id="search_resuilts">
                                         <tr>
