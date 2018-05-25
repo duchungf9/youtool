@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Alaouy\Youtube\Youtube;
+use Illuminate\Support\Facades\DB;
 use YoutubeDl\YoutubeDl;
 use YoutubeDl\Exception\CopyrightException;
 use YoutubeDl\Exception\NotFoundException;
@@ -41,14 +42,20 @@ class YoutubeController extends Controller
 		}
 		$dl = new YoutubeDl([
 			'continue' => true, // force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
-			'format' => 'bestvideo',
+			'format' => 'best'
 		]);
 		// For more options go to https://github.com/rg3/youtube-dl#user-content-options
 		$dl->setBinPath(storage_path('/youtube-dl.exe'));
 		$dl->setDownloadPath(storage_path("videos"));
 		try {
 			$video = $dl->download('https://www.youtube.com/watch?v='.$videoId);
-			echo $video->getTitle(); // Will return Phonebloks
+			$tittle =  $video->getTitle(); // Will return Phonebloks
+			DB::table('videos_downloaded')->insert(
+				[
+					'tittle'=>$tittle,
+					'link_to_video'=>storage_path("videos/".$video->getFilename()),
+				]
+			);
 			// $video->getFile(); // \SplFileInfo instance of downloaded file
 		} catch (NotFoundException $e) {
 			// Video not found
