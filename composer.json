@@ -8,7 +8,8 @@
         "php": ">=5.6.4",
         "alaouy/youtube": "^2.2",
         "laravel/framework": "5.5.*",
-        "norkunas/youtube-dl-php": "^1.0"
+        "norkunas/youtube-dl-php": "^1.0",
+        "google/apiclient": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
