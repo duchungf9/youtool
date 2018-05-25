@@ -38,20 +38,31 @@ class YoutubeController extends Controller
     	$allVideos = DB::table('videos_downloaded')->get();
 		$OAUTH2_CLIENT_ID = '990134486198-ojek7fk9eis03vi0evq5c3m7fh9maski.apps.googleusercontent.com';
 		$OAUTH2_CLIENT_SECRET = 'pnOhVWsIou5KtdLIRDNd1oyO';
-		
 		$client = new \Google_Client();
 		$client->setAuthConfig(storage_path('client_secret_990134486198-ojek7fk9eis03vi0evq5c3m7fh9maski.apps.googleusercontent.com.json'));
 		$client->setAccessType("offline");        // offline access
 		$client->setIncludeGrantedScopes(true);   // incremental auth
 		$client->addScope(\Google_Service_Drive::DRIVE_METADATA_READONLY);
+		$client->setScopes('https://www.googleapis.com/auth/youtube');
 		$client->setRedirectUri('http://youtool.vn/youtool/public/upload_video');
 		$auth_url = $client->createAuthUrl();
-		if(request()->has('code')){
-			$client->authenticate($_GET['code']);
-			$access_token = $client->getAccessToken();
-			dd($access_token);
+		dump(session()->all());
+		if(session()->has('access_token') && session()->get('access_token')!= null){
+			$client->setAccessToken(session()->get('access_token')['access_token']);
 		}
-		return redirect(filter_var($auth_url, FILTER_SANITIZE_URL));
+		if($client->getAccessToken()){
+			$youtube = new \Google_Service_YouTube($client);
+
+			
+		}
+		if(request()->has('code')){
+			$client->authenticate(request()->get('code'));
+			$access_token = $client->getAccessToken();
+			dump($access_token);
+			session()->put('access_token',$access_token);
+		}else{
+			return redirect(filter_var($auth_url, FILTER_SANITIZE_URL));
+		}
 	}
 	
 	public function youtube_dl()
