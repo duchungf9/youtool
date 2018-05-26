@@ -70,13 +70,28 @@ function searchPage(pagetoken,params){
 }
 
 function downloadToLocal(obj){
+    var timer = 0;
     var vidid = ($(obj).attr('data-vidid'));
+    var intervalCount;
     $.ajax({
         url:"/youtool/public/downloadYt",
         data:{videoId:vidid},
         type:'POST',
-        success:function(data){
+        beforeSend:function(){
+            intervalCount = setInterval(function(){
+                timer+=1;
+                $(obj).html('Đang tải: '+timer+' giây');
+            },1000);
 
+        },
+        success:function(data){
+            if(typeof data.mes != 'undefined'){
+                if(data.mes =='success'){
+
+                    clearInterval(intervalCount);
+                    $(obj).html('Đã tải xong '+timer+' giây');
+                }
+            }
         }
     });
 }

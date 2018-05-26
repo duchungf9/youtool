@@ -35,7 +35,6 @@ class YoutubeController extends Controller
 	}
 	
 	public function getLocalVideos(){
-    	$allVideos = DB::table('videos_downloaded')->get();
 		$OAUTH2_CLIENT_ID = '990134486198-ojek7fk9eis03vi0evq5c3m7fh9maski.apps.googleusercontent.com';
 		$OAUTH2_CLIENT_SECRET = 'pnOhVWsIou5KtdLIRDNd1oyO';
 		$client = new \Google_Client();
@@ -46,19 +45,55 @@ class YoutubeController extends Controller
 		$client->setScopes('https://www.googleapis.com/auth/youtube');
 		$client->setRedirectUri('http://youtool.vn/youtool/public/upload_video');
 		$auth_url = $client->createAuthUrl();
-		dump(session()->all());
 		if(session()->has('access_token') && session()->get('access_token')!= null){
 			$client->setAccessToken(session()->get('access_token')['access_token']);
 		}
 		if($client->getAccessToken()){
-			$youtube = new \Google_Service_YouTube($client);
+			$allVideos = DB::table('videos_downloaded')->get();
+			if(request()->ajax()){
+				$youtube = new \Google_Service_YouTube($client);
+				$needToUploadVideo = DB::table('videos_downloaded')->where('link_to_file',request()->get('link_to_file'))->first();
+				$videoPath = $needToUploadVideo->link_to_file;
+				$snipper = new \Google_Service_YouTube_VideoSnippet();
+				$snipper->setTitle($needToUploadVideo->tittle);
+				$snipper->setDescription($needToUploadVideo->tittle);
+				$snipper->setTags(['tag1','tag2']);
+				$snipper->setCategoryId('22');
+				$status = new \Google_Service_YouTube_VideoStatus();
+				$status->privacyStatus = "unlisted";
+				$video = new \Google_Service_YouTube_video();
+				$video->setSnippet($snipper);
+				$video->setStatus($status);
+				$chunkSizeBytes = 1*1024*1024;
+				$client->setDefer(true);
+				$insertReq = $youtube->videos->insert("status,snippet",$video);
+				$media = new \Google_Http_MediaFileUpload(
+					$client,
+					$insertReq,
+					"video/*",
+					null,true,$chunkSizeBytes
+				);
+				$media->setFileSize(filesize($videoPath));
+				$status = false;
+				$handle = fopen($videoPath,'rb');
+				while (!$status && !feof($handle)) {
+					$chunk = fread($handle, $chunkSizeBytes);
+					$status = $media->nextChunk($chunk);
+				}
+				fclose($handle);
+				$client->setDefer(false);
+				DB::table('videos_downloaded')->where('link_to_file',request()->get('link_to_file'))
+					->update([
+						'upload_status'=>1
+					]);
 
+			}
+			return view('upload_video',compact('allVideos'));
 			
 		}
 		if(request()->has('code')){
 			$client->authenticate(request()->get('code'));
 			$access_token = $client->getAccessToken();
-			dump($access_token);
 			session()->put('access_token',$access_token);
 		}else{
 			return redirect(filter_var($auth_url, FILTER_SANITIZE_URL));
@@ -81,12 +116,15 @@ class YoutubeController extends Controller
 		try {
 			$video = $dl->download('https://www.youtube.com/watch?v='.$videoId);
 			$tittle =  $video->getTitle(); // Will return Phonebloks
-			DB::table('videos_downloaded')->insert(
+			$a = DB::table('videos_downloaded')->insert(
 				[
 					'tittle'=>$tittle,
 					'link_to_file'=>storage_path("videos/".$video->getFilename()),
 				]
 			);
+			if($a){
+				return response()->json(['mes'=>'success']);
+			}
 			// $video->getFile(); // \SplFileInfo instance of downloaded file
 		} catch (NotFoundException $e) {
 			// Video not found
