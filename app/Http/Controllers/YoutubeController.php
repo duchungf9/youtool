@@ -43,7 +43,7 @@ class YoutubeController extends Controller
 		$client->setIncludeGrantedScopes(true);   // incremental auth
 		$client->addScope(\Google_Service_Drive::DRIVE_METADATA_READONLY);
 		$client->setScopes('https://www.googleapis.com/auth/youtube');
-		$client->setRedirectUri('http://youtool.vn/youtool/public/upload_video');
+		$client->setRedirectUri('http://youtool.vn/upload_video');
 		$auth_url = $client->createAuthUrl();
 		if(session()->has('access_token') && session()->get('access_token')!= null){
 			$client->setAccessToken(session()->get('access_token')['access_token']);

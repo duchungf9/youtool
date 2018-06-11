@@ -74,7 +74,7 @@ function downloadToLocal(obj){
     var vidid = ($(obj).attr('data-vidid'));
     var intervalCount;
     $.ajax({
-        url:"/youtool/public/downloadYt",
+        url:"/downloadYt",
         data:{videoId:vidid},
         type:'POST',
         beforeSend:function(){
